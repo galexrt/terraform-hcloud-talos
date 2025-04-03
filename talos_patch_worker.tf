@@ -23,6 +23,9 @@ locals {
             ]
           }
         }
+        nodeLabels = {
+          "node-role.kubernetes.io/worker" = "true"
+        }
         network = {
           extraHostEntries = local.extra_host_entries
           kubespan = {
@@ -44,7 +47,7 @@ locals {
         features = {
           hostDNS = {
             enabled              = true
-            forwardKubeDNSToHost = true
+            forwardKubeDNSToHost = false
             resolveMemberNames   = true
           }
         }

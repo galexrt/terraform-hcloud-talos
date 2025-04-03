@@ -75,7 +75,7 @@ locals {
           }
           hostDNS = {
             enabled              = true
-            forwardKubeDNSToHost = true
+            forwardKubeDNSToHost = false
             resolveMemberNames   = true
           }
         }
