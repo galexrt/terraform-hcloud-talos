@@ -69,7 +69,24 @@ data "talos_machine_configuration" "control_plane" {
   kubernetes_version = var.kubernetes_version
   machine_type       = "controlplane"
   machine_secrets    = talos_machine_secrets.this.machine_secrets
-  config_patches     = [yamlencode(local.controlplane_yaml[each.value.name])]
+  config_patches     = [
+    yamlencode(local.controlplane_yaml[each.value.name]),
+    var.enable_spegel ? yamlencode({
+      machine = {
+        files = [
+          {
+            # For Spegel
+            path    = "/etc/cri/conf.d/20-customization.part"
+            op      = "create"
+            content = <<-EOF
+[plugins."io.containerd.cri.v1.images"]
+  discard_unpacked_layers = false
+EOF
+          }
+        ]
+      }
+    }) : "{}",
+  ]
   docs               = false
   examples           = false
 }
@@ -83,9 +100,26 @@ data "talos_machine_configuration" "worker" {
   kubernetes_version = var.kubernetes_version
   machine_type       = "worker"
   machine_secrets    = talos_machine_secrets.this.machine_secrets
-  config_patches     = [yamlencode(local.worker_yaml[each.value.name])]
-  docs               = false
-  examples           = false
+  config_patches = [
+    yamlencode(local.worker_yaml[each.value.name]),
+    var.enable_spegel ? yamlencode({
+      machine = {
+        files = [
+          {
+            # For Spegel
+            path    = "/etc/cri/conf.d/20-customization.part"
+            op      = "create"
+            content = <<-EOF
+[plugins."io.containerd.cri.v1.images"]
+  discard_unpacked_layers = false
+EOF
+          }
+        ]
+      }
+    }) : "{}",
+  ]
+  docs     = false
+  examples = false
 }
 
 resource "talos_machine_bootstrap" "this" {

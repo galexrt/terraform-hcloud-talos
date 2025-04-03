@@ -376,3 +376,31 @@ variable "extraManifests" {
   default     = null
   description = "Additional manifests URL applied during Talos bootstrap."
 }
+
+variable "enable_spegel" {
+  type        = bool
+  default     = false
+  description = "Configure and deploy Spegel."
+}
+
+variable "spegel_version" {
+  type = string
+  default = "0.1.1"
+  description = <<EOF
+    The version of Spegel to deploy. If not set, the `0.1.1` version will be used.
+  EOF
+}
+
+variable "spegel_values" {
+  type        = list(string)
+  default     = null
+  description = <<EOF
+    The values.yaml file to use for the Spegel Helm chart.
+    If null (default), the default values will be used.
+    Otherwise, the provided values will be used.
+    Example:
+    ```
+    spegel_values  = [templatefile("cilium/values.yaml", {})]
+    ```
+  EOF
+}

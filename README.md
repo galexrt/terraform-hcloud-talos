@@ -70,6 +70,17 @@ This repository contains a Terraform module for creating a Kubernetes cluster wi
 - [Validates and approves node CSRs](https://github.com/siderolabs/talos-cloud-controller-manager?tab=readme-ov-file#node-certificate-approval).
 - In DaemonSet mode: CCM will use hostNetwork and current node to access kubernetes/talos API
 
+### [Spegel](https://spegel.dev/)
+
+- Speed up container pulls and minimize downtime with a stateless peer-to-peer
+- OCI registry mirror for efficient image distribution
+
+Requires you to be logged into ´ghcr.io` registry with your helm client:
+
+```bash
+gh auth token | helm registry login ghcr.io -u YOUR_GITHUB_USERNAME --password-stdin
+```
+
 ## Prerequisites
 
 ### Required Software
