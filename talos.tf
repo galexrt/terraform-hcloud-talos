@@ -69,7 +69,7 @@ data "talos_machine_configuration" "control_plane" {
   kubernetes_version = var.kubernetes_version
   machine_type       = "controlplane"
   machine_secrets    = talos_machine_secrets.this.machine_secrets
-  config_patches     = [
+  config_patches = concat([
     yamlencode(local.controlplane_yaml[each.value.name]),
     var.enable_spegel ? yamlencode({
       machine = {
@@ -86,9 +86,10 @@ EOF
         ]
       }
     }) : "{}",
-  ]
-  docs               = false
-  examples           = false
+    ],
+  [for patch in var.control_plane_talos_patches : yamlencode(patch)])
+  docs     = false
+  examples = false
 }
 
 data "talos_machine_configuration" "worker" {
@@ -100,7 +101,7 @@ data "talos_machine_configuration" "worker" {
   kubernetes_version = var.kubernetes_version
   machine_type       = "worker"
   machine_secrets    = talos_machine_secrets.this.machine_secrets
-  config_patches = [
+  config_patches = concat([
     yamlencode(local.worker_yaml[each.value.name]),
     var.enable_spegel ? yamlencode({
       machine = {
@@ -117,7 +118,8 @@ EOF
         ]
       }
     }) : "{}",
-  ]
+    ],
+  [for patch in var.worker_talos_patches : yamlencode(patch)])
   docs     = false
   examples = false
 }

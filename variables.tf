@@ -404,3 +404,15 @@ variable "spegel_values" {
     ```
   EOF
 }
+
+variable "control_plane_talos_patches" {
+  type = list(map(any))
+  default = []
+  description = "Additional patches to add to the controle plane talos machine configuration."
+}
+
+variable "worker_talos_patches" {
+  type = list(map(any))
+  default = []
+  description = "Additional patches to add to the worker talos machine configuration."
+}
